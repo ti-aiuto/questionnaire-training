@@ -1,73 +1,150 @@
 require 'sinatra'
 require 'sinatra/json'
 
-get '/questionnaires/sample' do
+question1 = {
+  code: 'select_food',
+  title: '好きな食べもの',
+  description: '好きな食べ物を選択してください',
+  is_required: true,
+  answer_type: 'radio_button',
+  visualization_type: 'pie',
+  options: [
+    {
+      code: 'code1',
+      label: 'パン'
+    },
+    {
+      code: 'code2',
+      label: 'ごはん'
+    },
+    {
+      code: 'code3',
+      label: 'うどん'
+    }
+  ]
+}
+
+question2 = {
+  code: 'select_food_multiple',
+  title: '好きな食べもの複数選択',
+  description: '好きな食べ物を選択してください',
+  is_required: true,
+  answer_type: 'checkbox',
+  visualization_type: 'bar',
+  options: [
+    {
+      code: 'code1',
+      label: 'パン'
+    },
+    {
+      code: 'code2',
+      v: 'ごはん'
+    },
+    {
+      code: 'code3',
+      label: 'うどん'
+    }
+  ]
+}
+
+question3 = {
+  code: 'select_food_free',
+  title: '好きな食べもの',
+  description: '好きな食べ物を入力してください',
+  is_required: true,
+  answer_type: 'short_text',
+  visualization_type: 'list'
+}
+
+question4 = {
+  code: 'select_food_free_long',
+  title: '好きな食べもの長文',
+  description: '好きな食べ物を入力してください',
+  is_required: true,
+  answer_type: 'long_text',
+  visualization_type: 'list'
+}
+
+sample = {
+  id: 1,
+  title: 'アンケートサンプル',
+  is_open: true,
+  questions: [
+    question1,
+    question2,
+    question3,
+    question4
+  ]
+}
+
+get '/questionnaires/sample/form' do
+  json(sample)
+end
+
+get '/questionnaires/sample/result' do
   json(
     {
-      id: 1,
-      title: 'アンケートサンプル',
-      is_open: true,
-      questions: [
+      questionnaire: sample,
+      aggregated_questions: [
         {
-          code: 'select_food',
-          title: '好きな食べもの',
-          description: '好きな食べ物を選択してください',
-          is_required: true,
-          answer_type: 'radio_button',
-          visualization_type: 'pie',
-          options: [
+          question: question1,
+          aggregated_options: [
             {
-              code: 'code1',
-              title: 'パン'
+              label: 'うどん',
+              count: 2
             },
             {
-              code: 'code2',
-              title: 'ごはん'
+              label: 'ごはん',
+              count: 3
             },
             {
-              code: 'code3',
-              title: 'うどん'
+              label: 'パン',
+              count: 5
             }
           ]
         },
         {
-          code: 'select_food_multiple',
-          title: '好きな食べもの複数選択',
-          description: '好きな食べ物を選択してください',
-          is_required: true,
-          answer_type: 'checkbox',
-          visualization_type: 'bar',
-          options: [
+          question: question2,
+          aggregated_options: [
             {
-              code: 'code1',
-              title: 'パン'
+              label: 'うどん',
+              count: 2
             },
             {
-              code: 'code2',
-              title: 'ごはん'
+              label: 'ごはん',
+              count: 3
             },
             {
-              code: 'code3',
-              title: 'うどん'
+              label: 'パン',
+              count: 5
             }
           ]
         },
         {
-          code: 'select_food_free',
-          title: '好きな食べもの',
-          description: '好きな食べ物を入力してください',
-          is_required: true,
-          answer_type: 'short_text',
-          visualization_type: 'list'
+          question: question3,
+          aggregated_options: [
+            {
+              label: 'うどんが好きです',
+              count: 1
+            },
+            {
+              label: 'ごはんが好きです',
+              count: 1
+            }
+          ]
         },
         {
-          code: 'select_food_free_long',
-          title: '好きな食べもの長文',
-          description: '好きな食べ物を入力してください',
-          is_required: true,
-          answer_type: 'long_text',
-          visualization_type: 'list'
-
+          question: question4,
+          aggregated_options: [
+            {
+              label: 'うどんが好きです',
+              count: 1
+            },
+            {
+              label: 'ごはんが好きです',
+              count: 1
+            }
+          ]
         }
       ]
     }
