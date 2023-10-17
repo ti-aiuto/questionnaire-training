@@ -14,6 +14,7 @@ get '/questionnaires/sample' do
           description: '好きな食べ物を選択してください',
           is_required: true,
           answer_type: 'radio_button',
+          visualization_type: 'pie',
           options: [
             {
               code: 'code1',
@@ -35,6 +36,7 @@ get '/questionnaires/sample' do
           description: '好きな食べ物を選択してください',
           is_required: true,
           answer_type: 'checkbox',
+          visualization_type: 'bar',
           options: [
             {
               code: 'code1',
@@ -55,14 +57,17 @@ get '/questionnaires/sample' do
           title: '好きな食べもの',
           description: '好きな食べ物を入力してください',
           is_required: true,
-          answer_type: 'short_text'
+          answer_type: 'short_text',
+          visualization_type: 'list'
         },
         {
           code: 'select_food_free_long',
           title: '好きな食べもの長文',
           description: '好きな食べ物を入力してください',
           is_required: true,
-          answer_type: 'long_text'
+          answer_type: 'long_text',
+          visualization_type: 'list'
+
         }
       ]
     }
