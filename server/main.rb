@@ -8,6 +8,7 @@ question1 = {
   is_required: true,
   answer_type: 'radio_button',
   visualization_type: 'pie',
+  result_visibility: 'public',
   options: [
     {
       code: 'code1',
