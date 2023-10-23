@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { logger } from 'hono/logger'
 
 import {
   question1,
@@ -10,6 +11,8 @@ import {
 } from "./sample";
 
 const app = new Hono();
+app.use('*', logger())
+
 app.get("/questionnaires/sample/form", (c) => c.json(sampleQuestionnaire));
 app.get("/questionnaires/sample/result", (c) =>
   c.json({
