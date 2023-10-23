@@ -1,21 +1,20 @@
 <template>
-  <div v-if="questionnaireResult">
-    <h2>{{ questionnaireResult.questionnaire.title }}</h2>
+  <div>
+    <div v-if="questionnaireResult">
+      <h2>{{ questionnaireResult.questionnaire.title }}</h2>
 
-    <div
-      v-for="aggregatedQuestion in questionnaireResult.aggregated_questions"
-    >
-      <div>
-        {{ aggregatedQuestion.question.title }}
-      </div>
-
-      <div 
-        v-for="aggregatedOption in aggregatedQuestion.aggregated_options"
+      <div
+        v-for="aggregatedQuestion in questionnaireResult.aggregated_questions"
       >
-        {{ aggregatedOption.label }}: 
-        {{ aggregatedOption.count }}<br>
+        <div>
+          {{ aggregatedQuestion.question.title }}
+        </div>
+
+        <div v-for="aggregatedOption in aggregatedQuestion.aggregated_options">
+          {{ aggregatedOption.label }}: {{ aggregatedOption.count }}<br />
+        </div>
+        <br />
       </div>
-      <br>
     </div>
   </div>
 </template>
