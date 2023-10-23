@@ -10,16 +10,24 @@
           {{ question.title }}
         </div>
 
-        <template v-if="['radio_button', 'checkbox'].includes(question.answer_type)">
+        <template v-if="question.answer_type === 'radio_button'">
           <div v-for="option in question.options">
+            <input type="radio">
             {{ option.label }}: {{ option.code }}
             <br />
           </div>
         </template>
-        <template v-else-if="['short_text'].includes(question.answer_type)">
+        <template v-else-if="question.answer_type === 'checkbox'">
+          <div v-for="option in question.options">
+            <input type="checkbox">
+            {{ option.label }}: {{ option.code }}
+            <br />
+          </div>
+        </template>
+        <template v-else-if="question.answer_type === 'short_text'">
           <input type="text">
         </template>
-        <template v-else-if="['long_text'].includes(question.answer_type)">
+        <template v-else-if="question.answer_type === 'long_text'">
           <textarea></textarea>
         </template>
       </div>

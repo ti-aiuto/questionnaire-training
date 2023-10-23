@@ -36,7 +36,7 @@ export const question2 = {
     },
     {
       code: "code2",
-      v: "ごはん",
+      label: "ごはん",
     },
     {
       code: "code3",
