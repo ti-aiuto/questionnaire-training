@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view></router-view>
+    <p>Hello Result Page</p>
   </div>
 </template>
 
