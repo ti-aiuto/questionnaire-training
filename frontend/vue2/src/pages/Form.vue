@@ -13,7 +13,9 @@
             <input
               type="radio"
               :value="option.code"
-              v-model="answerFormValues[question.code].selectedOptionCode"
+              v-model="
+                answerFormValues[question.code].selectOneOption['option_code']
+              "
             />
             {{ option.label }}
             <br />
@@ -24,7 +26,9 @@
             <input
               type="checkbox"
               :value="option.code"
-              v-model="answerFormValues[question.code].selectedOptionCodes"
+              v-model="
+                answerFormValues[question.code].selectMultipleOptions['option_codes']
+              "
             />
             {{ option.label }}
             <br />
@@ -33,12 +37,12 @@
         <template v-else-if="question.answer_type === 'short_text'">
           <input
             type="text"
-            v-model="answerFormValues[question.code].freeText"
+            v-model="answerFormValues[question.code].freeText['value']"
           />
         </template>
         <template v-else-if="question.answer_type === 'long_text'">
           <textarea
-            v-model="answerFormValues[question.code].freeText"
+            v-model="answerFormValues[question.code].freeText['value']"
           ></textarea>
         </template>
       </div>
@@ -60,11 +64,22 @@ export default Vue.extend({
     this.questionnaire = result.questionnaire;
     this.answerFormValues = this.questionnaire.questions.reduce(
       (prev, question) => {
-        prev[question.code] = {
-          selectedOptionCode: null,
-          selectedOptionCodes: [],
-          freeText: null,
-        };
+        if (question.answer_type === "radio_button") {
+          prev[question.code] = {
+            selectOneOption: { option_code: null },
+          };
+        } else if (question.answer_type === "checkbox") {
+          prev[question.code] = {
+            selectMultipleOptions: { option_codes: [] },
+          };
+        } else if (
+          question.answer_type === "short_text" ||
+          question.answer_type === "long_text"
+        ) {
+          prev[question.code] = {
+            freeText: { text: null },
+          };
+        }
         return prev;
       },
       {}
@@ -78,47 +93,9 @@ export default Vue.extend({
   },
   methods: {
     async submit() {
-      const questionAnswers = this.questionnaire.questions.map((question) => {
-        if (question.answer_type === "radio_button") {
-          return {
-            questionCode: question.code,
-            selectedOptions: question.options.filter((option) => {
-              return (
-                this.answerFormValues[question.code].selectedOptionCode ===
-                option.code
-              );
-            }),
-          };
-        } else if (question.answer_type === "checkbox") {
-          return {
-            questionCode: question.code,
-            selectedOptions: question.options.filter((option) => {
-              return this.answerFormValues[
-                question.code
-              ].selectedOptionCodes.includes(option.code);
-            }),
-          };
-        } else if (
-          question.answer_type === "short_text" ||
-          question.answer_type === "long_text"
-        ) {
-          const freeText = this.answerFormValues[question.code].freeText;
-          if (freeText?.length) {
-            return {
-              questionCode: question.code,
-              freeText: {
-                value: this.answerFormValues[question.code].freeText,
-              },
-            };
-          } else {
-            return {
-              questionCode: question.code,
-              freeText: { value: null },
-            };
-          }
-        }
-      });
-      const answer = { questionAnswers };
+      const answer = {
+        questionAnswers: structuredClone(this.answerFormValues),
+      };
       console.log(answer);
       try {
         const result = await ky
