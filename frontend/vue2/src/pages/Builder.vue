@@ -6,11 +6,11 @@
       <div v-for="question in editingQuestionnaire.questions">
         <div>
           設問名
-          <input type="text" v-model="question.title">
+          <input type="text" v-model="question.title" />
         </div>
         <div>
           識別子
-          <input type="text" v-model="question.code">
+          <input type="text" v-model="question.code" />
         </div>
         <div>
           必須
@@ -55,11 +55,13 @@
             <br />
           </div>
 
-          <button>選択肢を追加</button>
+          <button @click="addOption(question)">選択肢を追加</button>
         </template>
 
         <br />
       </div>
+
+      <button @click="addQuestion()">質問を追加</button>
     </div>
   </div>
 </template>
@@ -116,6 +118,20 @@ export default Vue.extend({
         return;
       }
       question.options.splice(index, 1);
+    },
+    addOption(question) {
+      question.options.push({
+        label: '新しい選択肢',
+        code: Date.now(),
+      });
+    },
+    addQuestion(question) {
+      this.editingQuestionnaire.questions.push({
+        title: '新しい質問',
+        code: Date.now(),
+        is_required: true,
+        answer_type: 'short_text'
+      });
     },
   },
 });
