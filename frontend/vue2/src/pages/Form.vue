@@ -10,23 +10,36 @@
 
         <template v-if="question.answer_type === 'radio_button'">
           <div v-for="option in question.options">
-            <input type="radio" />
-            {{ option.label }}: {{ option.code }}
+            <input
+              type="radio"
+              :value="option.code"
+              v-model="answerFormValues[question.code].selectedOptionCode"
+            />
+            {{ option.label }}
             <br />
           </div>
         </template>
         <template v-else-if="question.answer_type === 'checkbox'">
           <div v-for="option in question.options">
-            <input type="checkbox" />
-            {{ option.label }}: {{ option.code }}
+            <input
+              type="checkbox"
+              :value="option.code"
+              v-model="answerFormValues[question.code].selectedOptionCodes"
+            />
+            {{ option.label }}
             <br />
           </div>
         </template>
         <template v-else-if="question.answer_type === 'short_text'">
-          <input type="text" />
+          <input
+            type="text"
+            v-model="answerFormValues[question.code].freeText"
+          />
         </template>
         <template v-else-if="question.answer_type === 'long_text'">
-          <textarea></textarea>
+          <textarea
+            v-model="answerFormValues[question.code].freeText"
+          ></textarea>
         </template>
       </div>
     </div>
@@ -42,11 +55,22 @@ export default Vue.extend({
     const result = await ky(
       "http://localhost:8787/api/v1/questionnaires/sample/form"
     ).json();
-    this.questionnaire = result.questionnaire;
+    const questionnaire = result.questionnaire;
+    this.questionnaire = questionnaire;
+
+    this.answerFormValues = questionnaire.questions.reduce((prev, question) => {
+      prev[question.code] = {
+        selectedOptionCode: null,
+        selectedOptionCodes: [],
+        freeText: null,
+      };
+      return prev;
+    }, {});
   },
   data() {
     return {
       questionnaire: null,
+      answerFormValues: null,
     };
   },
 });
