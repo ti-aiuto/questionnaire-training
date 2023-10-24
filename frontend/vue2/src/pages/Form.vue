@@ -79,32 +79,38 @@ export default Vue.extend({
   methods: {
     async submit() {
       const questionAnswers = this.questionnaire.questions.map((question) => {
-        let selectedOptions = [];
         if (question.answer_type === "radio_button") {
-          selectedOptions = question.options.filter((option) => {
-            return (
-              this.answerFormValues[question.code].selectedOptionCode ===
-              option.code
-            );
-          });
+          return {
+            selectedOptions: question.options.filter((option) => {
+              return (
+                this.answerFormValues[question.code].selectedOptionCode ===
+                option.code
+              );
+            }),
+          };
         } else if (question.answer_type === "checkbox") {
-          selectedOptions = question.options.filter((option) => {
-            return this.answerFormValues[
-              question.code
-            ].selectedOptionCodes.includes(option.code);
-          });
+          return {
+            selectedOptions: question.options.filter((option) => {
+              return this.answerFormValues[
+                question.code
+              ].selectedOptionCodes.includes(option.code);
+            }),
+          };
         } else if (
           question.answer_type === "short_text" ||
           question.answer_type === "long_text"
         ) {
           const freeText = this.answerFormValues[question.code].freeText;
           if (freeText?.length) {
-            selectedOptions = [
-              { label: this.answerFormValues[question.code].freeText },
-            ];
+            return {
+              freeText: {
+                value: this.answerFormValues[question.code].freeText,
+              },
+            };
+          } else {
+            return { freeText: { value: null } };
           }
         }
-        return { selectedOptions };
       });
       const answer = { questionAnswers };
       console.log(answer);
