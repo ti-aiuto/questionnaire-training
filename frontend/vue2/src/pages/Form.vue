@@ -104,7 +104,7 @@ export default Vue.extend({
       });
 
       const answer = {
-        questionAnswers,
+        question_answers: questionAnswers,
       };
       try {
         const result = await ky
