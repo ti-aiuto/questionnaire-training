@@ -23,15 +23,27 @@
             question.answer_type === 'checkbox'
           "
         >
-          <div v-for="option in question.options">
+          <div v-for="(option, index) in question.options">
             表記: <input type="text" :value="option.label" /><br />
             識別子: <input type="text" :value="option.code" /><br />
 
-            <button>選択肢を削除</button>
-            <button>↑へ</button>
-            <button>↓へ</button>
-            <br>
-            <br>
+            <button @click="deleteOption(question, option)">
+              選択肢を削除
+            </button>
+            <button
+              @click="moveOptionUpward(question, option)"
+              :disabled="index === 0"
+            >
+              ↑へ
+            </button>
+            <button
+              @click="moveOptionDownward(question, option)"
+              :disabled="index + 1 === question.options.length"
+            >
+              >↓へ
+            </button>
+            <br />
+            <br />
           </div>
 
           <button>選択肢を追加</button>
@@ -47,6 +59,12 @@
 import Vue from "vue";
 import ky from "ky";
 
+function swap(array, index1, index2) {
+  const temp = array[index1];
+  array.splice(index1, 1, array[index2]);
+  array.splice(index2, 1, temp);
+}
+
 export default Vue.extend({
   async created() {
     const result = await ky(
@@ -60,6 +78,36 @@ export default Vue.extend({
       questionnaire: null,
       editingQuestionnaire: null,
     };
+  },
+  methods: {
+    moveOptionUpward(question, option) {
+      const index = question.options.indexOf(option);
+      if (index === -1) {
+        console.error("不正なindex");
+        return;
+      }
+      if (index >= 1) {
+        swap(question.options, index, index - 1);
+      }
+    },
+    moveOptionDownward(question, option) {
+      const index = question.options.indexOf(option);
+      if (index === -1) {
+        console.error("不正なindex");
+        return;
+      }
+      if (index + 1 < question.options.length) {
+        swap(question.options, index, index + 1);
+      }
+    },
+    deleteOption(question, option) {
+      const index = question.options.indexOf(option);
+      if (index === -1) {
+        console.error("不正なindex");
+        return;
+      }
+      question.options.splice(index, 1);
+    },
   },
 });
 </script>
