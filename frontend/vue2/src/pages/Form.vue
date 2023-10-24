@@ -42,6 +42,8 @@
           ></textarea>
         </template>
       </div>
+
+      <button @click="submit()">送信</button>
     </div>
   </div>
 </template>
@@ -55,23 +57,70 @@ export default Vue.extend({
     const result = await ky(
       "http://localhost:8787/api/v1/questionnaires/sample/form"
     ).json();
-    const questionnaire = result.questionnaire;
-    this.questionnaire = questionnaire;
-
-    this.answerFormValues = questionnaire.questions.reduce((prev, question) => {
-      prev[question.code] = {
-        selectedOptionCode: null,
-        selectedOptionCodes: [],
-        freeText: null,
-      };
-      return prev;
-    }, {});
+    this.questionnaire = result.questionnaire;
+    this.answerFormValues = this.questionnaire.questions.reduce(
+      (prev, question) => {
+        prev[question.code] = {
+          selectedOptionCode: null,
+          selectedOptionCodes: [],
+          freeText: null,
+        };
+        return prev;
+      },
+      {}
+    );
   },
   data() {
     return {
       questionnaire: null,
       answerFormValues: null,
     };
+  },
+  methods: {
+    async submit() {
+      const questionAnswers = this.questionnaire.questions.map((question) => {
+        let selectedOptions = [];
+        if (question.answer_type === "radio_button") {
+          selectedOptions = question.options.filter((option) => {
+            return (
+              this.answerFormValues[question.code].selectedOptionCode ===
+              option.code
+            );
+          });
+        } else if (question.answer_type === "checkbox") {
+          selectedOptions = question.options.filter((option) => {
+            return this.answerFormValues[
+              question.code
+            ].selectedOptionCodes.includes(option.code);
+          });
+        } else if (
+          question.answer_type === "short_text" ||
+          question.answer_type === "long_text"
+        ) {
+          const freeText = this.answerFormValues[question.code].freeText;
+          if (freeText?.length) {
+            selectedOptions = [
+              { label: this.answerFormValues[question.code].freeText },
+            ];
+          }
+        }
+        return { selectedOptions };
+      });
+      const answer = { questionAnswers };
+      console.log(answer);
+      try {
+        const result = await ky
+          .post("http://localhost:8787/api/v1/questionnaires/sample/answers", {
+            json: { answer },
+          })
+          .json();
+        console.log(result);
+        alert("保存しました");
+      } catch (e) {
+        console.log(e);
+        alert("保存中にエラーが発生しました");
+      }
+    },
   },
 });
 </script>
