@@ -14,7 +14,7 @@
               type="radio"
               :value="option.code"
               v-model="
-                answerFormValues[question.code].selectOneOption['option_code']
+                answerFormValues[question.code].select_one_option['option_code']
               "
             />
             {{ option.label }}
@@ -27,7 +27,9 @@
               type="checkbox"
               :value="option.code"
               v-model="
-                answerFormValues[question.code].selectMultipleOptions['option_codes']
+                answerFormValues[question.code].select_multiple_options[
+                  'option_codes'
+                ]
               "
             />
             {{ option.label }}
@@ -66,11 +68,11 @@ export default Vue.extend({
       (prev, question) => {
         if (question.answer_type === "radio_button") {
           prev[question.code] = {
-            selectOneOption: { option_code: null },
+            select_one_option: { option_code: null },
           };
         } else if (question.answer_type === "checkbox") {
           prev[question.code] = {
-            selectMultipleOptions: { option_codes: [] },
+            select_multiple_options: { option_codes: [] },
           };
         } else if (
           question.answer_type === "short_text" ||
@@ -93,10 +95,17 @@ export default Vue.extend({
   },
   methods: {
     async submit() {
+      const questionAnswers = this.questionnaire.questions.map((question) => {
+        const questionAnswer = structuredClone(
+          this.answerFormValues[question.code]
+        );
+        questionAnswer["question_code"] = question.code;
+        return questionAnswer;
+      });
+
       const answer = {
-        questionAnswers: structuredClone(this.answerFormValues),
+        questionAnswers,
       };
-      console.log(answer);
       try {
         const result = await ky
           .post("http://localhost:8787/api/v1/questionnaires/sample/answers", {
