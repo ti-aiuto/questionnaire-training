@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-import mysql2 from "mysql2/promise";
+import mysql2, { RowDataPacket } from "mysql2/promise";
 import { sampleQuestionnaire, sampleResult } from "./sample";
 
 require('dotenv').config();
@@ -41,7 +41,9 @@ app.put("/api/v1/questionnaires/sample/builder", (c) =>
   c.json({ questionnaire: sampleQuestionnaire })
 );
 app.get("/api/v1/questionnaires/sample/form", async (c) => {
-  c.json({ questionnaire: sampleQuestionnaire })
+  // const [[questionnaire]] = await mysqlPool.query<RowDataPacket[]>("SELECT questionnaire_id, title, questions FROM `questionnaires` WHERE questionnaire_id = 1");
+  // return c.json({ questionnaire })
+  return c.json({ questionnaire: sampleQuestionnaire })
 }
 );
 app.post("/api/v1/questionnaires/sample/answers", (c) =>
