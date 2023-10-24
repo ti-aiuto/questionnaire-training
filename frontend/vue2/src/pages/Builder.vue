@@ -5,11 +5,20 @@
 
       <div v-for="question in editingQuestionnaire.questions">
         <div>
-          {{ question.title }}
+          設問名
+          <input type="text" v-model="question.title">
+        </div>
+        <div>
+          識別子
+          <input type="text" v-model="question.code">
+        </div>
+        <div>
+          必須
+          <input type="checkbox" v-model="question.is_required" />
         </div>
 
         <div>
-          <select :value="question.answer_type">
+          <select v-model="question.answer_type">
             <option value="radio_button">単一選択（ラジオボタン）</option>
             <option value="checkbox">複数選択（ラジオボタン）</option>
             <option value="short_text">自由記述(一行)</option>
@@ -24,8 +33,8 @@
           "
         >
           <div v-for="(option, index) in question.options">
-            表記: <input type="text" :value="option.label" /><br />
-            識別子: <input type="text" :value="option.code" /><br />
+            表記: <input type="text" v-model="option.label" /><br />
+            識別子: <input type="text" v-model="option.code" /><br />
 
             <button @click="deleteOption(question, option)">
               選択肢を削除

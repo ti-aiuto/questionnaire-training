@@ -4,7 +4,6 @@ export const question1 = {
   description: "好きな食べ物を選択してください",
   is_required: true,
   answer_type: "radio_button",
-  visualization_type: "pie",
   result_visibility: "public",
   options: [
     {
@@ -28,7 +27,6 @@ export const question2 = {
   description: "好きな食べ物を選択してください",
   is_required: true,
   answer_type: "checkbox",
-  visualization_type: "bar",
   options: [
     {
       code: "code1",
@@ -51,7 +49,6 @@ export const question3 = {
   description: "好きな食べ物を入力してください",
   is_required: true,
   answer_type: "short_text",
-  visualization_type: "list",
 };
 
 export const question4 = {
@@ -60,7 +57,6 @@ export const question4 = {
   description: "好きな食べ物を入力してください",
   is_required: true,
   answer_type: "long_text",
-  visualization_type: "list",
 };
 
 export const sampleQuestionnaire = {
