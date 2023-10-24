@@ -81,6 +81,7 @@ export default Vue.extend({
       const questionAnswers = this.questionnaire.questions.map((question) => {
         if (question.answer_type === "radio_button") {
           return {
+            questionCode: question.code,
             selectedOptions: question.options.filter((option) => {
               return (
                 this.answerFormValues[question.code].selectedOptionCode ===
@@ -90,6 +91,7 @@ export default Vue.extend({
           };
         } else if (question.answer_type === "checkbox") {
           return {
+            questionCode: question.code,
             selectedOptions: question.options.filter((option) => {
               return this.answerFormValues[
                 question.code
@@ -103,12 +105,16 @@ export default Vue.extend({
           const freeText = this.answerFormValues[question.code].freeText;
           if (freeText?.length) {
             return {
+              questionCode: question.code,
               freeText: {
                 value: this.answerFormValues[question.code].freeText,
               },
             };
           } else {
-            return { freeText: { value: null } };
+            return {
+              questionCode: question.code,
+              freeText: { value: null },
+            };
           }
         }
       });
