@@ -135,7 +135,7 @@ export default Vue.extend({
         answer_type: "short_text",
       });
     },
-    save() {
+    async save() {
       const questions = this.editingQuestionnaire.questions.map(
         (editingQuestion) => {
           const question = structuredClone(editingQuestion);
@@ -149,12 +149,23 @@ export default Vue.extend({
         }
       );
 
-      const data = {
+      const questionnaire = {
         title: this.editingQuestionnaire.title,
         questions,
       };
 
-      console.log(data);
+      try {
+        const result = await ky
+          .put("http://localhost:8787/api/v1/questionnaires/sample/builder", {
+            json: { questionnaire },
+          })
+          .json();
+        console.log(result);
+        alert("保存しました");
+      } catch (e) {
+        console.log(e);
+        alert("保存中にエラーが発生しました");
+      }
     },
   },
 });
