@@ -3,29 +3,27 @@
     <div v-if="questionnaire">
       <h2>{{ questionnaire.title }}</h2>
 
-      <div
-        v-for="question in questionnaire.questions"
-      >
+      <div v-for="question in questionnaire.questions">
         <div>
           {{ question.title }}
         </div>
 
         <template v-if="question.answer_type === 'radio_button'">
           <div v-for="option in question.options">
-            <input type="radio">
+            <input type="radio" />
             {{ option.label }}: {{ option.code }}
             <br />
           </div>
         </template>
         <template v-else-if="question.answer_type === 'checkbox'">
           <div v-for="option in question.options">
-            <input type="checkbox">
+            <input type="checkbox" />
             {{ option.label }}: {{ option.code }}
             <br />
           </div>
         </template>
         <template v-else-if="question.answer_type === 'short_text'">
-          <input type="text">
+          <input type="text" />
         </template>
         <template v-else-if="question.answer_type === 'long_text'">
           <textarea></textarea>
@@ -41,9 +39,10 @@ import ky from "ky";
 
 export default Vue.extend({
   async created() {
-    this.questionnaire = await ky(
+    const result = await ky(
       "http://localhost:8787/api/v1/questionnaires/sample/form"
     ).json();
+    this.questionnaire = result.questionnaire;
   },
   data() {
     return {

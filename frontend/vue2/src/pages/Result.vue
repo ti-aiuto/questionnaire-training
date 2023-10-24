@@ -25,9 +25,10 @@ import ky from "ky";
 
 export default Vue.extend({
   async created() {
-    this.questionnaireResult = await ky(
+    const result = await ky(
       "http://localhost:8787/api/v1/questionnaires/sample/result"
     ).json();
+    this.questionnaireResult = result.questionnaire_result;
   },
   data() {
     return {

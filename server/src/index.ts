@@ -21,15 +21,17 @@ app.use(
 );
 
 app.get("/api/v1/questionnaires/sample/builder", (c) =>
-  c.json(sampleQuestionnaire)
+  c.json({ questionnaire: sampleQuestionnaire })
 );
 app.put("/api/v1/questionnaires/sample/builder", (c) =>
-  c.json(sampleQuestionnaire)
+  c.json({ questionnaire: sampleQuestionnaire })
 );
 app.get("/api/v1/questionnaires/sample/form", (c) =>
-  c.json(sampleQuestionnaire)
+  c.json({ questionnaire: sampleQuestionnaire })
 );
-app.get("/api/v1/questionnaires/sample/result", (c) => c.json(sampleResult));
+app.get("/api/v1/questionnaires/sample/result", (c) =>
+  c.json({ questionnaire_result: sampleResult })
+);
 
 serve({
   fetch: app.fetch,
