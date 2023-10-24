@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="editingQuestionnaire">
-      <h2>{{ editingQuestionnaire.title }}</h2>
+      <h2><input type="text" v-model="editingQuestionnaire.title" /></h2>
 
       <div v-for="question in editingQuestionnaire.questions">
         <div>
@@ -61,7 +61,9 @@
         <br />
       </div>
 
-      <button @click="addQuestion()">質問を追加</button>
+      <button @click="addQuestion()">質問を追加</button><br />
+      <br />
+      <button @click="save()">保存</button>
     </div>
   </div>
 </template>
@@ -121,17 +123,38 @@ export default Vue.extend({
     },
     addOption(question) {
       question.options.push({
-        label: '新しい選択肢',
+        label: "新しい選択肢",
         code: Date.now(),
       });
     },
-    addQuestion(question) {
+    addQuestion() {
       this.editingQuestionnaire.questions.push({
-        title: '新しい質問',
+        title: "新しい質問",
         code: Date.now(),
         is_required: true,
-        answer_type: 'short_text'
+        answer_type: "short_text",
       });
+    },
+    save() {
+      const questions = this.editingQuestionnaire.questions.map(
+        (editingQuestion) => {
+          const question = structuredClone(editingQuestion);
+          if (
+            question.answer_type === "short_text" ||
+            question.answer_type === "long_text"
+          ) {
+            question.options = null;
+          }
+          return question;
+        }
+      );
+
+      const data = {
+        title: this.editingQuestionnaire.title,
+        questions,
+      };
+
+      console.log(data);
     },
   },
 });
