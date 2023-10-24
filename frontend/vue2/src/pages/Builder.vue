@@ -8,26 +8,14 @@
           {{ question.title }}
         </div>
 
-        <template v-if="question.answer_type === 'radio_button'">
-          <div v-for="option in question.options">
-            <input type="radio" />
-            {{ option.label }}: {{ option.code }}
-            <br />
-          </div>
-        </template>
-        <template v-else-if="question.answer_type === 'checkbox'">
-          <div v-for="option in question.options">
-            <input type="checkbox" />
-            {{ option.label }}: {{ option.code }}
-            <br />
-          </div>
-        </template>
-        <template v-else-if="question.answer_type === 'short_text'">
-          <input type="text" />
-        </template>
-        <template v-else-if="question.answer_type === 'long_text'">
-          <textarea></textarea>
-        </template>
+        <div>
+          <select :value="question.answer_type">
+            <option value="radio_button">単一選択（ラジオボタン）</option>
+            <option value="checkbox">複数選択（ラジオボタン）</option>
+            <option value="short_text">自由記述(一行)</option>
+            <option value="long_text">自由記述（複数行）</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
