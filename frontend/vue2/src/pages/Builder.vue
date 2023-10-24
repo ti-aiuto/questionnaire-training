@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="questionnaire">
-      <h2>{{ questionnaire.title }}</h2>
+    <div v-if="editingQuestionnaire">
+      <h2>{{ editingQuestionnaire.title }}</h2>
 
-      <div v-for="question in questionnaire.questions">
+      <div v-for="question in editingQuestionnaire.questions">
         <div>
           {{ question.title }}
         </div>
@@ -31,10 +31,12 @@ export default Vue.extend({
       "http://localhost:8787/api/v1/questionnaires/sample/builder"
     ).json();
     this.questionnaire = result.questionnaire;
+    this.editingQuestionnaire = structuredClone(result.questionnaire);
   },
   data() {
     return {
       questionnaire: null,
+      editingQuestionnaire: null
     };
   },
 });
