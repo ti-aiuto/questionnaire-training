@@ -29,6 +29,9 @@ app.put("/api/v1/questionnaires/sample/builder", (c) =>
 app.get("/api/v1/questionnaires/sample/form", (c) =>
   c.json({ questionnaire: sampleQuestionnaire })
 );
+app.post("/api/v1/questionnaires/sample/answers", (c) =>
+  c.json({ questionnaire: sampleQuestionnaire })
+);
 app.get("/api/v1/questionnaires/sample/result", (c) =>
   c.json({ questionnaire_result: sampleResult })
 );
