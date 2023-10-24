@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>研修用アンケートアプリ</h1>
     <ul>
       <li>
         <router-link to="/form" v-slot="{ href }">
