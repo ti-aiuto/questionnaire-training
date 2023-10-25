@@ -60,7 +60,7 @@ export const question4 = {
 };
 
 export const sampleQuestionnaire = {
-  id: 1,
+  questionnaire_id: 1,
   title: "アンケートサンプル",
   is_open: true,
   questions: [question1, question2, question3, question4],
