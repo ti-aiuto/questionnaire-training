@@ -1,11 +1,11 @@
+require('dotenv').config();
+
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import mysql2, { RowDataPacket } from "mysql2/promise";
 import { sampleQuestionnaire, sampleResult } from "./sample";
-
-require('dotenv').config();
 
 const mysqlPool = mysql2.createPool({
   host: process.env.QUESTIONNAIRE_DB_HOST,
